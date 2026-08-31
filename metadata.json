@@ -1,0 +1,6 @@
+{
+  "name": "سامانه کارکرد آرمان انتخاب",
+  "description": "سیستم مدیریت مأموریت‌ها، ثبت سفرها و محاسبه کارکرد و درآمد رانندگان هلدینگ آرمان انتخاب",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

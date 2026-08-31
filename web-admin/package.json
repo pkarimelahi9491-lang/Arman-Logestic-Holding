@@ -1,0 +1,65 @@
+{
+  "name": "arman-entekhab-fleet-admin",
+  "version": "1.0.0",
+  "description": "سامانه مدیریت ناوگان و تسویه رانندگان هلدینگ آرمان انتخاب (نسخه دسکتاپ ویندوز EXE و تحت وب)",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:portable": "electron-builder --win portable",
+    "build:nsis": "electron-builder --win nsis",
+    "dist": "electron-builder --win portable nsis",
+    "pack": "electron-builder --dir"
+  },
+  "keywords": [
+    "fleet-management",
+    "glassmorphism",
+    "electron",
+    "windows-exe",
+    "offline-database"
+  ],
+  "author": "Holding Arman Entekhab",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.2.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.arman.fleet.admin",
+    "productName": "ArmanFleetAdmin",
+    "copyright": "Copyright © 2026 Holding Arman Entekhab",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        },
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "legalTrademarks": "هلدینگ آرمان انتخاب"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "مدیریت ناوگان آرمان انتخاب"
+    },
+    "portable": {
+      "splashImage": null,
+      "artifactName": "Arman-Fleet-Admin-Portable.exe"
+    },
+    "files": [
+      "index.html",
+      "styles.css",
+      "app.js",
+      "main.js",
+      "preload.js"
+    ]
+  }
+}

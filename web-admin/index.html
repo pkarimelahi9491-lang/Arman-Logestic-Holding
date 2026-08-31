@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پنل مدیریت و امور مالی ناوگان | هلدینگ آرمان انتخاب</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Ambient Specular Glass Glows -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <div class="app-container">
+    <!-- Header / Brand Bar -->
+    <header class="glass-header">
+      <div class="header-right">
+        <div class="brand-badge">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="brand-text">
+          <h1>هلدینگ آرمان انتخاب</h1>
+          <p>سامانه جامع و یکپارچه مدیریت مأموریت و ناوگان</p>
+        </div>
+      </div>
+      <div class="header-left">
+        <!-- Platform Badge (Desktop EXE vs Web) -->
+        <div id="platformBadge" class="platform-badge">
+          <i class="fa-brands fa-windows"></i>
+          <span>سامانه دسکتاپ ویندوز</span>
+        </div>
+
+        <div class="backup-actions">
+          <button id="exportAllJsonBtn" class="btn-glass" title="پشتیبان‌گیری از پایگاه‌داده (JSON)">
+            <i class="fa-solid fa-cloud-arrow-down"></i>
+            <span>پشتیبان فایل</span>
+          </button>
+          <button id="importAllJsonBtn" class="btn-glass" title="بازیابی اطلاعات از فایل پشتیبان">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <span>بازیابی</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="glass-nav">
+      <button class="nav-tab active" data-tab="dashboard">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>داشبورد کارکرد</span>
+      </button>
+      <button class="nav-tab" data-tab="routes">
+        <i class="fa-solid fa-route"></i>
+        <span>ماتریس نرخ و مسیرها</span>
+      </button>
+      <button class="nav-tab" data-tab="drivers">
+        <i class="fa-solid fa-id-card"></i>
+        <span>مدیریت رانندگان</span>
+      </button>
+      <button class="nav-tab" data-tab="finance">
+        <i class="fa-solid fa-receipt"></i>
+        <span>صورت‌حساب و تسویه مالی</span>
+      </button>
+      <button class="nav-tab" data-tab="audit">
+        <i class="fa-solid fa-clipboard-check"></i>
+        <span>لاگ‌های حسابرسی</span>
+      </button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- 1. DASHBOARD TAB -->
+      <section id="tab-dashboard" class="tab-pane active">
+        <div class="stats-grid">
+          <div class="glass-card stat-card border-blue">
+            <div class="stat-icon icon-blue"><i class="fa-solid fa-users"></i></div>
+            <div class="stat-info">
+              <span class="stat-title">رانندگان فعال</span>
+              <strong id="statActiveDrivers" class="stat-value">۱۲ نفر</strong>
+              <small class="stat-desc">ناوگان آماده به کار هلدینگ</small>
+            </div>
+          </div>
+          <div class="glass-card stat-card border-amber">
+            <div class="stat-icon icon-amber"><i class="fa-solid fa-map-location-dot"></i></div>
+            <div class="stat-info">
+              <span class="stat-title">مسیرهای مصوب</span>
+              <strong id="statTotalRoutes" class="stat-value">۴۸ مسیر</strong>
+              <small class="stat-desc">دارای تعرفه قفل شده مالی</small>
+            </div>
+          </div>
+          <div class="glass-card stat-card border-green">
+            <div class="stat-icon icon-green"><i class="fa-solid fa-car-side"></i></div>
+            <div class="stat-info">
+              <span class="stat-title">کل سفرهای ماه جاری</span>
+              <strong id="statMonthlyTrips" class="stat-value">۳۴۲ سفر</strong>
+              <small class="stat-desc">ثبت شده در سیستم</small>
+            </div>
+          </div>
+          <div class="glass-card stat-card border-gold">
+            <div class="stat-icon icon-gold"><i class="fa-solid fa-coins"></i></div>
+            <div class="stat-info">
+              <span class="stat-title">کل کارکرد ناوگان (تومان)</span>
+              <strong id="statTotalHoldingsAmount" class="stat-value">۲۶۸,۵۰۰,۰۰۰</strong>
+              <small class="stat-desc">تعهد مالی دوره جاری</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions & Daily Overview -->
+        <div class="two-col-grid">
+          <div class="glass-card">
+            <div class="card-header">
+              <h2><i class="fa-solid fa-bolt"></i> دسترسی‌های سریع مدیریت</h2>
+            </div>
+            <div class="action-buttons-grid">
+              <button class="action-btn" onclick="switchTab('routes')">
+                <i class="fa-solid fa-plus-circle"></i>
+                <div>
+                  <strong>ثبت مسیر جدید</strong>
+                  <p>تعریف مبدأ، مقصد و نرخ ریالی</p>
+                </div>
+              </button>
+              <button class="action-btn" onclick="switchTab('drivers')">
+                <i class="fa-solid fa-user-plus"></i>
+                <div>
+                  <strong>افزودن راننده جدید</strong>
+                  <p>کد شناسایی و مشخصات خودرو</p>
+                </div>
+              </button>
+              <button class="action-btn" onclick="switchTab('finance')">
+                <i class="fa-solid fa-file-excel"></i>
+                <div>
+                  <strong>خروجی اکسل تسویه ماهانه</strong>
+                  <p>دانلود فایل CSV سازگار با حسابداری</p>
+                </div>
+              </button>
+              <button class="action-btn" onclick="openCsvModal()">
+                <i class="fa-solid fa-file-import"></i>
+                <div>
+                  <strong>همگام‌سازی دسته‌جمعی نرخ‌ها</strong>
+                  <p>ایمپورت فایل اکسل/CSV مسیرها</p>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div class="glass-card dark-card">
+            <div class="card-header">
+              <h2><i class="fa-solid fa-shield"></i> وضعیت امنیتی و پایگاه‌داده دسکتاپ</h2>
+            </div>
+            <div class="security-status">
+              <div class="sec-item">
+                <i class="fa-solid fa-circle-check text-green"></i>
+                <span>پایگاه‌داده محلی مستقل (Offline Disk Database) فعال است</span>
+              </div>
+              <div class="sec-item">
+                <i class="fa-solid fa-circle-check text-green"></i>
+                <span>پشتیبان‌گیری خودکار از دیتابیس در فایل Bak</span>
+              </div>
+              <div class="sec-item">
+                <i class="fa-solid fa-circle-check text-green"></i>
+                <span>پشتیبانی کامل از دیالوگ‌های بومی ذخیره فایل در ویندوز</span>
+              </div>
+            </div>
+            <div class="holding-quote">
+              <p>«نرم‌افزار مدیریت مأموریت و ناوگان هلدینگ آرمان انتخاب - تضمین دقت در اسناد مالی و جلوگیری از اشتباهات انسانی»</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. ROUTES & RATES TAB -->
+      <section id="tab-routes" class="tab-pane">
+        <div class="glass-card">
+          <div class="table-toolbar">
+            <div class="search-box">
+              <i class="fa-solid fa-search"></i>
+              <input type="text" id="routeSearchInput" placeholder="جستجو در کد، مبدأ یا مقصد مسیر...">
+            </div>
+            <div class="toolbar-actions">
+              <button class="btn-secondary" onclick="openCsvModal()">
+                <i class="fa-solid fa-file-csv"></i> ایمپورت اکسل (CSV)
+              </button>
+              <button class="btn-primary" onclick="openAddRouteModal()">
+                <i class="fa-solid fa-plus"></i> ثبت مسیر مصوب جدید
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="glass-table" id="routesTable">
+              <thead>
+                <tr>
+                  <th>کد مسیر</th>
+                  <th>مبدأ حرکت</th>
+                  <th>مقصد نهایی</th>
+                  <th>نرخ مصوب (تومان)</th>
+                  <th>توضیحات و شیفت</th>
+                  <th>عملیات</th>
+                </tr>
+              </thead>
+              <tbody id="routesTableBody">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. DRIVERS TAB -->
+      <section id="tab-drivers" class="tab-pane">
+        <div class="glass-card">
+          <div class="table-toolbar">
+            <div class="search-box">
+              <i class="fa-solid fa-search"></i>
+              <input type="text" id="driverSearchInput" placeholder="جستجو نام، کد راننده، خودرو...">
+            </div>
+            <div class="toolbar-actions">
+              <button class="btn-primary" onclick="openAddDriverModal()">
+                <i class="fa-solid fa-user-plus"></i> ثبت راننده جدید
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="glass-table" id="driversTable">
+              <thead>
+                <tr>
+                  <th>کد راننده</th>
+                  <th>نام و نام خانوادگی</th>
+                  <th>کد پرسنلی</th>
+                  <th>نوع خودرو و پلاک</th>
+                  <th>شماره تماس</th>
+                  <th>وضعیت</th>
+                  <th>عملیات</th>
+                </tr>
+              </thead>
+              <tbody id="driversTableBody">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. FINANCIAL SETTLEMENT TAB -->
+      <section id="tab-finance" class="tab-pane">
+        <div class="glass-card">
+          <div class="finance-header-bar">
+            <div class="period-picker">
+              <label><i class="fa-solid fa-calendar-days"></i> دوره محاسبه:</label>
+              <select id="financeMonthSelect">
+                <option value="1403-06">شهریور ۱۴۰۳</option>
+                <option value="1403-05">مرداد ۱۴۰۳</option>
+                <option value="1403-04">تیر ۱۴۰۳</option>
+                <option value="1403-03">خرداد ۱۴۰۳</option>
+              </select>
+            </div>
+            <div class="toolbar-actions">
+              <button class="btn-secondary" onclick="exportFinanceCsv()">
+                <i class="fa-solid fa-file-excel text-green"></i> خروجی اکسل (CSV)
+              </button>
+              <button class="btn-primary" onclick="triggerPrint()">
+                <i class="fa-solid fa-print"></i> چاپ گزارش تجمیعی
+              </button>
+            </div>
+          </div>
+
+          <!-- Financial Total Banner -->
+          <div class="financial-summary-banner">
+            <div>
+              <span>جمع کل کارکرد ناوگان در دوره</span>
+              <h3 id="financeTotalPayable">۲۶۸,۵۰۰,۰۰۰ تومان</h3>
+            </div>
+            <div class="status-badge-approved">
+              <i class="fa-solid fa-circle-check"></i> محاسبات دقیق و بدون خطای انسانی
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="glass-table" id="financeTable">
+              <thead>
+                <tr>
+                  <th>کد</th>
+                  <th>نام راننده</th>
+                  <th>کد پرسنلی</th>
+                  <th>روزهای کاری</th>
+                  <th>تعداد کل سفر</th>
+                  <th>جمع کل کارکرد (تومان)</th>
+                  <th>وضعیت پرداخت</th>
+                  <th>فیش انفرادی</th>
+                </tr>
+              </thead>
+              <tbody id="financeTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. AUDIT LOGS TAB -->
+      <section id="tab-audit" class="tab-pane">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-clipboard-list"></i> گزارش وقایع و تغییرات امنیتی</h2>
+          </div>
+          <div class="table-responsive">
+            <table class="glass-table" id="auditTable">
+              <thead>
+                <tr>
+                  <th>شناسه</th>
+                  <th>زمان و تاریخ</th>
+                  <th>اپراتور</th>
+                  <th>نوع عملیات</th>
+                  <th>جزئیات تغییرات</th>
+                </tr>
+              </thead>
+              <tbody id="auditTableBody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODALS -->
+  <!-- Route Modal -->
+  <div id="routeModal" class="modal-overlay">
+    <div class="glass-modal">
+      <div class="modal-header">
+        <h3 id="routeModalTitle">ثبت / ویرایش مسیر مصوب</h3>
+        <button class="close-btn" onclick="closeModal('routeModal')">&times;</button>
+      </div>
+      <form id="routeForm" onsubmit="handleSaveRoute(event)">
+        <input type="hidden" id="routeFormId">
+        <div class="form-group">
+          <label>کد مسیر (یکتا):</label>
+          <input type="text" id="routeCodeInput" required placeholder="مثال: R-101">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>مبدأ حرکت:</label>
+            <input type="text" id="routeOriginInput" required placeholder="مثال: کارخانه اصفهان">
+          </div>
+          <div class="form-group">
+            <label>مقصد نهایی:</label>
+            <input type="text" id="routeDestInput" required placeholder="مثال: دفتر مرکزی تهران">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>نرخ مصوب مالی (تومان):</label>
+          <input type="number" id="routePriceInput" required placeholder="مثال: 850000">
+        </div>
+        <div class="form-group">
+          <label>توضیحات مسیر و شیفت:</label>
+          <input type="text" id="routeDescInput" placeholder="مثال: شیفت روز / مسیر مستقیم">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeModal('routeModal')">انصراف</button>
+          <button type="submit" class="btn-primary">ذخیره و ثبت</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Driver Modal -->
+  <div id="driverModal" class="modal-overlay">
+    <div class="glass-modal">
+      <div class="modal-header">
+        <h3 id="driverModalTitle">ثبت / ویرایش راننده</h3>
+        <button class="close-btn" onclick="closeModal('driverModal')">&times;</button>
+      </div>
+      <form id="driverForm" onsubmit="handleSaveDriver(event)">
+        <input type="hidden" id="driverFormId">
+        <div class="form-row">
+          <div class="form-group">
+            <label>نام و نام خانوادگی:</label>
+            <input type="text" id="driverNameInput" required placeholder="مثال: علیرضا محمدی">
+          </div>
+          <div class="form-group">
+            <label>کد راننده:</label>
+            <input type="text" id="driverCodeInput" required placeholder="مثال: D-101">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>کد پرسنلی هلدینگ:</label>
+            <input type="text" id="driverPersonnelInput" required placeholder="مثال: 94812">
+          </div>
+          <div class="form-group">
+            <label>شماره تماس:</label>
+            <input type="text" id="driverPhoneInput" required placeholder="مثال: 09131112233">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>نوع خودرو:</label>
+            <input type="text" id="driverVehicleInput" required placeholder="مثال: پژو پارس سفید">
+          </div>
+          <div class="form-group">
+            <label>شماره پلاک خودرو:</label>
+            <input type="text" id="driverPlateInput" required placeholder="مثال: ایران 13 - 485 س 21">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeModal('driverModal')">انصراف</button>
+          <button type="submit" class="btn-primary">ذخیره مشخصات راننده</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CSV Import Modal -->
+  <div id="csvModal" class="modal-overlay">
+    <div class="glass-modal">
+      <div class="modal-header">
+        <h3>همگام‌سازی دسته‌جمعی مسیرها از اکسل (CSV)</h3>
+        <button class="close-btn" onclick="closeModal('csvModal')">&times;</button>
+      </div>
+      <div class="csv-help">
+        <p>فرمت هر سطر باید به این ترتیب باشد (با کاما یا کامای انگلیسی):</p>
+        <code>کد مسیر, مبدأ, مقصد, نرخ مصوب به تومان, توضیحات</code>
+      </div>
+      <textarea id="csvTextarea" rows="8" placeholder="R-101,کارخانه اصفهان,دفتر تهران,850000,مسیر روز
+R-102,دفتر تهران,انبار مرکزی,450000,شیفت عصر
+R-103,کارخانه مورچه خورت,دفتر اصفهان,320000,مسیر مستقیم"></textarea>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" onclick="closeModal('csvModal')">انصراف</button>
+        <button type="button" class="btn-primary" onclick="handleImportCsv()">واردسازی و به‌روزرسانی جدول</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Driver Slip Print Modal -->
+  <div id="slipModal" class="modal-overlay">
+    <div class="glass-modal" style="max-width: 580px;">
+      <div class="modal-header">
+        <h3>فیش صورت‌حساب مالی راننده</h3>
+        <button class="close-btn" onclick="closeModal('slipModal')">&times;</button>
+      </div>
+      <div id="slipContent" class="slip-container">
+        <!-- Injected via JS -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" onclick="closeModal('slipModal')">بستن</button>
+        <button type="button" class="btn-primary" onclick="triggerPrint()">
+          <i class="fa-solid fa-print"></i> چاپ فیش
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

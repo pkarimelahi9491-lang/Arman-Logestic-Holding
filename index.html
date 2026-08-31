@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>سامانه مدیریت ناوگان و ثبت کارکرد رانندگان | هلدینگ آرمان انتخاب</title>
+  <meta name="description" content="سامانه جامع ثبت مأموریت، تعرفه‌گذاری مصوب، تأیید کارکرد روزانه رانندگان و تسویه مالی هلدینگ انتخاب">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ambient background glow -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="glass-header">
+      <div class="brand-section">
+        <div class="brand-logo">
+          <i class="fa-solid fa-truck-ramp-box"></i>
+        </div>
+        <div class="brand-title">
+          <h1>هلدینگ آرمان انتخاب</h1>
+          <p>سامانه جامع و یکپارچه مدیریت ناوگان و ثبت کارکرد</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <!-- Role Switcher -->
+        <div class="role-switcher">
+          <button id="btnRoleDriver" class="role-btn active">
+            <i class="fa-solid fa-id-card"></i>
+            <span>پنل راننده</span>
+          </button>
+          <button id="btnRoleAdmin" class="role-btn gold">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>پنل مدیریت و مالی</span>
+          </button>
+        </div>
+
+        <button id="btnBackupData" class="btn btn-outline btn-sm" title="دریافت فایل پشتیبان JSON">
+          <i class="fa-solid fa-download"></i>
+          <span>پشتیبان</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 1. DRIVER PORTAL -->
+    <div id="portalDriver">
+      <!-- Driver Top Info -->
+      <div class="glass-card" style="margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <i class="fa-solid fa-user-circle" style="font-size:2rem; color:var(--accent-gold);"></i>
+            <div>
+              <span style="font-size:0.8rem; color:var(--text-secondary);">راننده فعال فعلی:</span>
+              <select id="driverSelect" class="form-control" style="font-weight:700; width:auto; display:inline-block; margin-right:6px;"></select>
+            </div>
+          </div>
+          <div id="driverInfoBadge" class="badge badge-active" style="padding:8px 14px; font-size:0.85rem;"></div>
+        </div>
+      </div>
+
+      <!-- Driver Stats -->
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-icon icon-blue"><i class="fa-solid fa-route"></i></div>
+          <div class="stat-details">
+            <span class="stat-label">سفرهای ثبت‌شده ماه</span>
+            <span id="driverStatTrips" class="stat-number">۰ سفر</span>
+          </div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon icon-green"><i class="fa-solid fa-coins"></i></div>
+          <div class="stat-details">
+            <span class="stat-label">درآمد تأیید شده</span>
+            <span id="driverStatIncome" class="stat-number">۰ تومان</span>
+          </div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon icon-gold"><i class="fa-solid fa-clock"></i></div>
+          <div class="stat-details">
+            <span class="stat-label">در انتظار تأیید مدیر</span>
+            <span id="driverStatPending" class="stat-number">۰</span>
+          </div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-icon icon-purple"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="stat-details">
+            <span class="stat-label">مأموریت‌های مصوب</span>
+            <span id="driverStatApproved" class="stat-number">۰</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form: Register Trip -->
+      <div class="glass-card">
+        <div class="card-header">
+          <h2><i class="fa-solid fa-circle-plus"></i> ثبت مأموریت و سفر جدید</h2>
+          <button id="btnReverseRoute" type="button" class="btn btn-outline btn-sm">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i> معکوس‌سازی مبدأ و مقصد
+          </button>
+        </div>
+
+        <form id="tripForm">
+          <div class="form-grid">
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label><i class="fa-solid fa-map-location-dot"></i> انتخاب سریع از مسیرهای مصوب هلدینگ:</label>
+              <select id="logRouteSelect" class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+              <label>مبدأ حرکت:</label>
+              <input type="text" id="logOrigin" class="form-control" placeholder="مثلاً: دفتر مرکزی تهران" required>
+            </div>
+
+            <div class="form-group">
+              <label>مقصد مأموریت:</label>
+              <input type="text" id="logDestination" class="form-control" placeholder="مثلاً: کارخانه اصفهان" required>
+            </div>
+
+            <div class="form-group">
+              <label>تاریخ شمسی:</label>
+              <input type="text" id="logDate" class="form-control" value="1403/06/12" placeholder="1403/06/12">
+            </div>
+
+            <div class="form-group">
+              <label>کرایه مصوب پایه (ریال):</label>
+              <input type="number" id="logFare" class="form-control" placeholder="۰" required>
+            </div>
+
+            <div class="form-group">
+              <label>ساعات اضافه کار / معطلی:</label>
+              <input type="number" id="logOvertimeHours" class="form-control" value="0" min="0" max="24">
+            </div>
+
+            <div class="form-group">
+              <label>مبلغ کل قابل محاسبه:</label>
+              <div id="totalPreview" style="padding:10px 14px; background:rgba(0,0,0,0.3); border-radius:var(--radius-sm); font-weight:800; color:var(--accent-gold-light);">۰ ریال</div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px; display:flex; justify-content:flex-end;">
+            <button type="submit" class="btn btn-primary" style="min-width:200px;">
+              <i class="fa-solid fa-paper-plane"></i> ثبت مأموریت و ارسال به مدیر
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Driver Trips Table -->
+      <div class="glass-card">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-list-check"></i> کارنامه سفرهای ثبت شده</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>تاریخ</th>
+                <th>مسیر تردد</th>
+                <th>اضافه‌کاری</th>
+                <th>مبلغ کل</th>
+                <th>وضعیت تأیید</th>
+                <th>عملیات</th>
+              </tr>
+            </thead>
+            <tbody id="driverTripList"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. ADMIN PORTAL -->
+    <div id="portalAdmin" style="display:none;">
+      <!-- Admin Navigation -->
+      <nav class="glass-nav" style="margin-bottom:16px;">
+        <button class="nav-tab active" data-tab="approvals">
+          <i class="fa-solid fa-inbox"></i>
+          <span>کارتابل تأیید (<span id="adminPendingCountBadge">۰</span>)</span>
+        </button>
+        <button class="nav-tab" data-tab="routes">
+          <i class="fa-solid fa-route"></i>
+          <span>ماتریس مسیرها و تعرفه‌ها</span>
+        </button>
+        <button class="nav-tab" data-tab="drivers">
+          <i class="fa-solid fa-users"></i>
+          <span>مدیریت رانندگان</span>
+        </button>
+        <button class="nav-tab" data-tab="finance">
+          <i class="fa-solid fa-calculator"></i>
+          <span>صورت‌حساب و تسویه مالی</span>
+        </button>
+      </nav>
+
+      <main class="main-content">
+        <!-- 1. Approvals Tab -->
+        <section id="tab-approvals" class="tab-pane active">
+          <div class="glass-card">
+            <div class="card-header">
+              <h2><i class="fa-solid fa-clipboard-check"></i> کارتابل بررسی و تأیید کارکرد مأموریت‌ها</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>راننده</th>
+                    <th>تاریخ</th>
+                    <th>مسیر</th>
+                    <th>معطلی/اضافه‌کار</th>
+                    <th>مبلغ مصوب</th>
+                    <th>وضعیت</th>
+                    <th>تصمیم مدیر</th>
+                  </tr>
+                </thead>
+                <tbody id="adminApprovalList"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Routes & Tariffs Tab -->
+        <section id="tab-routes" class="tab-pane">
+          <div class="glass-card">
+            <div class="card-header">
+              <h2><i class="fa-solid fa-plus-circle"></i> تعریف مسیر و نرخ جدید</h2>
+            </div>
+            <form id="addRouteForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>کد مسیر:</label>
+                  <input type="text" id="routeCode" class="form-control" placeholder="مثلاً: THR-ISF-02" required>
+                </div>
+                <div class="form-group">
+                  <label>مبدأ:</label>
+                  <input type="text" id="routeOrigin" class="form-control" placeholder="تهران" required>
+                </div>
+                <div class="form-group">
+                  <label>مقصد:</label>
+                  <input type="text" id="routeDest" class="form-control" placeholder="اصفهان" required>
+                </div>
+                <div class="form-group">
+                  <label>تعرفه مصوب (ریال):</label>
+                  <input type="number" id="routePrice" class="form-control" placeholder="۹۵۰۰۰۰۰" required>
+                </div>
+                <div class="form-group" style="grid-column:1 / -1;">
+                  <label>توضیحات مسیر و نوع مأموریت:</label>
+                  <input type="text" id="routeDesc" class="form-control" placeholder="تردد شیفت روزانه، سرویس اداری مدیران...">
+                </div>
+              </div>
+              <div style="margin-top:16px; display:flex; justify-content:flex-end;">
+                <button type="submit" class="btn btn-green"><i class="fa-solid fa-check"></i> ثبت و الحاق به ماتریس نرخ‌ها</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="glass-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-table-list"></i> ماتریس مسیرها و تعرفه‌های مصوب هلدینگ</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>کد مسیر</th>
+                    <th>مبدأ</th>
+                    <th>مقصد</th>
+                    <th>نرخ مصوب (ریال)</th>
+                    <th>توضیحات</th>
+                  </tr>
+                </thead>
+                <tbody id="routesList"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Drivers Tab -->
+        <section id="tab-drivers" class="tab-pane">
+          <div class="glass-card">
+            <div class="card-header">
+              <h2><i class="fa-solid fa-user-plus"></i> ثبت راننده جدید در ناوگان</h2>
+            </div>
+            <form id="addDriverForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>نام و نام خانوادگی:</label>
+                  <input type="text" id="driverName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>کد پرسنلی:</label>
+                  <input type="text" id="driverPersonnel" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>مدل و رنگ خودرو:</label>
+                  <input type="text" id="driverVehicle" class="form-control" placeholder="پژو پارس سفید" required>
+                </div>
+                <div class="form-group">
+                  <label>شماره پلاک:</label>
+                  <input type="text" id="driverPlate" class="form-control" placeholder="۱۲ ج ۳۴۵ ایران ۲۲" required>
+                </div>
+                <div class="form-group">
+                  <label>شماره تماس همراه:</label>
+                  <input type="text" id="driverPhone" class="form-control" placeholder="09121234567" required>
+                </div>
+              </div>
+              <div style="margin-top:16px; display:flex; justify-content:flex-end;">
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> ذخیره راننده در ناوگان</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="glass-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-id-card"></i> پرونده رانندگان فعال</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>کد</th>
+                    <th>نام راننده</th>
+                    <th>کد پرسنلی</th>
+                    <th>خودرو</th>
+                    <th>پلاک</th>
+                    <th>تلفن</th>
+                  </tr>
+                </thead>
+                <tbody id="driversList"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Finance Tab -->
+        <section id="tab-finance" class="tab-pane">
+          <div class="glass-card">
+            <div class="card-header">
+              <h2><i class="fa-solid fa-file-invoice-dollar"></i> محاسبه تسویه حساب ماهانه رانندگان</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>راننده</th>
+                    <th>تعداد سفرهای مصوب</th>
+                    <th>مجموع کارکرد ناخالص</th>
+                    <th>کسورات مالیات/بیمه (۵٪)</th>
+                    <th>خالص پرداختی</th>
+                    <th>عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="financeList"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
